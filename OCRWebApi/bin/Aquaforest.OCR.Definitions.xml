@@ -1,0 +1,796 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Aquaforest.OCR.Definitions</name>
+    </assembly>
+    <members>
+        <member name="T:Aquaforest.OCR.Definitions.Structs.BBoxData">
+            <summary>
+            Describes the values in a bbox.
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Structs.BBoxData.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aquaforest.OCR.Definitions.Structs.BBoxData"/> struct.
+            </summary>
+            <param name="x0">The x0.</param>
+            <param name="y0">The y0.</param>
+            <param name="x1">The x1.</param>
+            <param name="y1">The y1.</param>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Structs.BBoxData.X0">
+            <summary>
+            Gets the x0.
+            </summary>
+            <value>The x0.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Structs.BBoxData.Y0">
+            <summary>
+            Gets the y0.
+            </summary>
+            <value>The y0.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Structs.BBoxData.X1">
+            <summary>
+            Gets the x1.
+            </summary>
+            <value>The x1.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Structs.BBoxData.Y1">
+            <summary>
+            Gets the y1.
+            </summary>
+            <value>The y1.</value>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Structs.CharacterData">
+            <summary>
+            Contains the data describing a single character extracted from a Cuniform output file.
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Structs.CharacterData.#ctor(System.Char,Aquaforest.OCR.Definitions.Structs.BBoxData)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aquaforest.OCR.Definitions.Structs.CharacterData"/> struct.
+            </summary>
+            <param name="character">A char.</param>
+            <param name="bBoxData">A BBoxData.</param>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Structs.CharacterData.Character">
+            <summary>
+            Gets the character.
+            </summary>
+            <value>The character.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Structs.CharacterData.Bbox">
+            <summary>
+            Gets the bbox.
+            </summary>
+            <value>BBoxData.</value>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Enums.DebugLevels">
+            <summary>
+            Debug information
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.AUTOROTATE_INFO">
+            <summary>
+            Autorotate information
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.AUTOROTATE_WORDS">
+            <summary>
+            Words used in autorotate decision
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.DEAD_PROCESS">
+            <summary>
+            Notification of Dead Child Process
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.ERRORS">
+            <summary>
+            Handled errors
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.EXCEPTIONS">
+            <summary>
+            Stack Trace and exception messages
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.IMAGE_PREPROCESSING">
+            <summary>
+            Image preprocessing
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.LEAVE_TEMP_FILES_IN_PLACE">
+            <summary>
+            Do not delete temporary files
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.MESSAGES">
+            <summary>
+            Interprocess messages
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.PDF_IMAGE_EXTRACTION">
+            <summary>
+            PDF image extraction
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.PIPE_EVENTS">
+            <summary>
+            Pipe connections/disconnections events
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.PROGRESS_UPDATES">
+            <summary>
+            General progress messages
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.TEMP_FILE_OPERATION">
+            <summary>
+            Temp File Operations
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.TIMEOUTS">
+            <summary>
+            Timeout messages
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.LOG_TO_FILE">
+            <summary>
+            Log output to file
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Enums.DebugLevels.STOP_ON_ERROR">
+            <summary>
+            Exit application on certain errors
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.OcrStatusEnum">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.FileOcrStatus">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.IFileWriter">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Structs.FormatStruct">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.ILineData">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.ILineData.Add(Aquaforest.OCR.Definitions.WordData)">
+            <summary>
+            Adds the specified character data.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILineData.Line">
+            <summary>
+            Gets the word.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILineData.Width">
+            <summary>
+            Gets the width of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILineData.Height">
+            <summary>
+            Gets the height of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILineData.Left">
+            <summary>
+            Gets the left (starting assuming words run left to right) edge of the word as described 
+            in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILineData.Bottom">
+            <summary>
+            Gets the bottom edge of the word as described in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.ILines">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.ILines.Add(Aquaforest.OCR.Definitions.Interfaces.ILineData)">
+            <summary>
+            Adds the specified word data.
+            </summary>
+            <param name="wordData">The WordData object.</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.ILines.GetFirst">
+            <summary>
+            Gets the first item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.ILines.GetNext">
+            <summary>
+            Gets the next item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.ILines.GetHeight(System.Int32)">
+            <summary>
+            Gets the height of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.ILines.GetWidth(System.Int32)">
+            <summary>
+            Gets the width of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILines.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Aquaforest.OCR.Definitions.WordData"/> at the specified index.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILines.Height">
+            <summary>
+            Gets the height of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.ILines.Width">
+            <summary>
+            Gets the width of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.IOcrEngine">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.IOcrOutputParser">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.IPdfToImage">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.IPdfWriter">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.IWordData">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.IWordData.Add(Aquaforest.OCR.Definitions.Structs.CharacterData)">
+            <summary>
+            Adds the specified character data.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWordData.AverageCharacterWidth">
+            <summary>
+            Gets the average width of the character.
+            </summary>
+            <value>The average width of the character.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWordData.AverageCharacterHeight">
+            <summary>
+            Gets the average height of the character.
+            </summary>
+            <value>The average height of the character.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWordData.Word">
+            <summary>
+            Gets the word.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWordData.Width">
+            <summary>
+            Gets the width of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWordData.Height">
+            <summary>
+            Gets the height of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWordData.Left">
+            <summary>
+            Gets the left (starting assuming words run left to right) edge of the word as described 
+            in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWordData.Bottom">
+            <summary>
+            Gets the bottom edge of the word as described in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Interfaces.IWords">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.IWords.Add(Aquaforest.OCR.Definitions.Interfaces.IWordData)">
+            <summary>
+            Adds the specified word data.
+            </summary>
+            <param name="wordData">The WordData object.</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.IWords.GetFirst">
+            <summary>
+            Gets the first item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.IWords.GetNext">
+            <summary>
+            Gets the next item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.IWords.GetHeight(System.Int32)">
+            <summary>
+            Gets the height of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Interfaces.IWords.GetWidth(System.Int32)">
+            <summary>
+            Gets the width of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWords.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Aquaforest.OCR.Definitions.WordData"/> at the specified index.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWords.Height">
+            <summary>
+            Gets the height of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Interfaces.IWords.Width">
+            <summary>
+            Gets the width of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Enums.LanguageEnum">
+            <summary>
+            Supported languages
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Structs.LanguageStruct">
+            <summary>
+            Language helper structure
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Structs.LanguageStruct.Language_Number">
+            <summary>
+            Language code
+            </summary>
+        </member>
+        <member name="F:Aquaforest.OCR.Definitions.Structs.LanguageStruct.Name">
+            <summary>
+            Language name
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.LineData">
+            <summary>
+            Describes a single word extracted from a Cuniform output file as a list of CharacterData objects.
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.LineData.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aquaforest.OCR.Definitions.WordData"/> class.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.LineData.Add(Aquaforest.OCR.Definitions.WordData)">
+            <summary>
+            Adds the specified character data.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.LineData.UpdateWordHeight(Aquaforest.OCR.Definitions.WordData)">
+            <summary>
+            Updates the height of the word.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.LineData.CalculateWordDimensionMovingAverages(Aquaforest.OCR.Definitions.WordData)">
+            <summary>
+            Calculates the character dimension moving averages.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.LineData.WordList">
+            <summary>
+            Gets the character list.
+            </summary>
+            <value>The character list.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.LineData.Line">
+            <summary>
+            Gets the line.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.LineData.Width">
+            <summary>
+            Gets the width of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.LineData.Height">
+            <summary>
+            Gets the height of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.LineData.Left">
+            <summary>
+            Gets the left (starting assuming words run left to right) edge of the word as described 
+            in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.LineData.Bottom">
+            <summary>
+            Gets the bottom edge of the word as described in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Lines">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Lines.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aquaforest.OCR.Definitions.Words"/> class.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Lines.Add(Aquaforest.OCR.Definitions.Interfaces.ILineData)">
+            <summary>
+            Adds the specified word data.
+            </summary>
+            <param name="wordData">The WordData object.</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Lines.GetFirst">
+            <summary>
+            Gets the first item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Lines.GetNext">
+            <summary>
+            Gets the next item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Lines.GetHeight(System.Int32)">
+            <summary>
+            Gets the height of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Lines.GetWidth(System.Int32)">
+            <summary>
+            Gets the width of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Lines.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Aquaforest.OCR.Definitions.WordData"/> at the specified index.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Lines.Height">
+            <summary>
+            Gets the height of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Lines.Width">
+            <summary>
+            Gets the width of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Aquaforest.Shared.Definitions.Enums.OcrWorkerThreadEventOutcomeEnum">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Enums.OutputFormatEnum">
+            <summary>
+            Supported output formats
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.StatusUpdateEventArgs">
+            <summary>
+            This class contains information relating to the conversion status of a page.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.ConfidenceScore">
+            <summary>
+            Gets the confidence score. Generally a value of 1 or greater would indicate reasonable
+            OCR of a page, but this should be confirmed using "typical" source files.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.Sc1">
+            <summary>
+            Autorotate heuristic score 1
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.Sc2">
+            <summary>
+            Autorotate heuristic score 2
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.Sc3">
+            <summary>
+            Autorotate heuristic score 3
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.Sc4">
+            <summary>
+            Autorotate heuristic score 4
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.Sc5">
+            <summary>
+            Autorotate heuristic score 5
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.Rotation">
+            <summary>
+            A value from 0 to 3 which indicates the rotation used for the output in terms of
+            the number of 90° steps away from the orientation in which the input page was provided. 
+            If Autorotate is set to false this will always be 0.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.PageNumber">
+            <summary>
+            This property returns page for which the object relates to.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.TextAvailable">
+            <summary>
+            This property indicates whether text was extracted for the page.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.ImageAvailable">
+            <summary>
+            This property indicates whether an image (after all appropriate pre-processing) was successfully extracted.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.StatusUpdateEventArgs.BlankPage">
+            <summary>
+            This property indicates whether the page was detected as blank.
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Enums.PagePositionEnum">
+            <summary>
+            Page position
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Enums.StampType">
+            <summary>
+            Stamp type
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.WordData">
+            <summary>
+            This class contains the individual characters along with the positional information relating to each character in the word and to the word as a whole.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.WordData.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aquaforest.OCR.Definitions.WordData"/> class.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.WordData.Add(Aquaforest.OCR.Definitions.Structs.CharacterData)">
+            <summary>
+            Adds the specified character data.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.WordData.UpdateWordHeight(Aquaforest.OCR.Definitions.Structs.CharacterData)">
+            <summary>
+            Updates the height of the word.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.WordData.CalculateCharacterDimensionMovingAverages(Aquaforest.OCR.Definitions.Structs.CharacterData)">
+            <summary>
+            Calculates the character dimension moving averages.
+            </summary>
+            <param name="characterData">The character data.</param>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.CharacterList">
+            <summary>
+            Gets the character list.
+            </summary>
+            <value>The character list.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.AverageCharacterWidth">
+            <summary>
+            Gets the average width of the character.
+            </summary>
+            <value>The average width of the character.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.AverageCharacterHeight">
+            <summary>
+            Gets the average height of the character.
+            </summary>
+            <value>The average height of the character.</value>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.Word">
+            <summary>
+            Gets the word.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.Width">
+            <summary>
+            Gets the width of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.Height">
+            <summary>
+            Gets the height of the word as described by the difference 
+            between the dimensions in the first bbox of the word and the last one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.Left">
+            <summary>
+            Gets the left (starting assuming words run left to right) edge of the word as described 
+            in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.Bottom">
+            <summary>
+            Gets the bottom edge of the word as described in the bbox for the first character.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.WordData.Top">
+            <summary>
+            Returns the Top of the word.
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Definitions.Words">
+            <summary>
+            This class contains a collection of WordData objects which are available on a page by page basis
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Words.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aquaforest.OCR.Definitions.Words"/> class.
+            An instance of this class is obtained by calling the ReadPageWords method on the Ocr object, passing the page for which the words are required.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Words.Add(Aquaforest.OCR.Definitions.Interfaces.IWordData)">
+            <summary>
+            Adds the specified word data.
+            </summary>
+            <param name="wordData">The WordData object.</param>
+            <exclude/>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Words.GetFirst">
+            <summary>
+            Gets the first item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Words.GetNext">
+            <summary>
+            Gets the next item in the collection.
+            </summary>
+            <returns>WordData</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Words.GetHeight(System.Int32)">
+            <summary>
+            Gets the height of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Definitions.Words.GetWidth(System.Int32)">
+            <summary>
+            Gets the width of the bbox for the character at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Words.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Aquaforest.OCR.Definitions.WordData"/> at the specified index.
+            </summary>
+            <value></value>
+            <exclude/>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Words.Height">
+            <summary>
+            Gets the height of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Aquaforest.OCR.Definitions.Words.Width">
+            <summary>
+            Gets the width of the bbox for the character at the current index.
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

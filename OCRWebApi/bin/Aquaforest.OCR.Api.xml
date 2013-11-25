@@ -1,0 +1,529 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Aquaforest.OCR.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Aquaforest.OCR.Api.SupportedLanguages">
+            <summary>
+             Sets the language to be used for the OCR processing. 
+             This takes a value from the enumeration SupportedLanguages which is defined in the API. 
+             Default language is English.
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Api.Ocr">
+            <summary>
+            This is the class that configures and performs the Optical Character Recognition.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadPDFSource(System.String,System.String)">
+            <summary>
+            Read a PDF source for OCR
+            </summary>
+            <param name="fileName"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadPDFSource(System.String)">
+            <summary>
+            Read a PDF source for OCR
+            </summary>
+            <param name="fileName"></param>
+            <returns></returns>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadImageSource(System.Drawing.Image)">
+            <summary>
+             Reads an Image object checking the number of frames (pages).
+            </summary>
+            
+            <param name="image">An image object</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadTIFFSource(System.String)">
+            <summary>
+            Read a TIFF source for OCR
+            </summary>
+            <param name="fileName">Source filename</param>
+            <returns>Success</returns>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadBMPSource(System.String)">
+            <summary>
+            Read a bitmap source for OCR
+            </summary>
+            <param name="fileName">Source filename</param>
+            <returns>Success</returns>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.Recognize(Aquaforest.OCR.Api.PreProcessor)">
+            <summary>
+            Call Recognize to perform the actual OCR once options have been set on the Ocr
+            and PreProcessor objects.
+            </summary>
+            <param name="preProcessor"></param>
+            <returns>Success</returns>
+            <exception cref="T:System.MissingFieldException"></exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.DeleteTemporaryFilesForPage(System.Int32)">
+            <summary>
+            Removes temporary files created during the OCR processing from the system for a particular page number. 
+            Note, do not call this before you have completely finished processing a file.
+            </summary>
+            <param name="pageNumber">An integer representing the Page Number</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.SavePDFOutput(System.String,System.Boolean)">
+            <summary>
+            Save PDF output file to the specified location. Note, this function should only
+            be called if the PDF output was enabled prior to the call to Recognize.
+            </summary>
+            <param name="fileName">Name of file to save output as</param>
+            <param name="overwriteExisting">True to overwrite any exiting file</param>
+            <returns>Success</returns>
+            <exception cref="T:System.MissingFieldException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.SavePDFAOutput(System.String,System.Boolean)">
+            <summary>
+            Save PDF/A output file to the specified location. Note, this function should only
+            be called if the source is an image and PDF output was enabled prior to the call to Recognize.
+            </summary>
+            <param name="fileName">Name of file to save output as</param>
+            <param name="overwriteExisting">True to overwrite any exiting file</param>
+            <returns>Success</returns>
+            <exception cref="T:System.MissingFieldException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.SaveTextOutput(System.String,System.Boolean)">
+            <summary>
+            Save simple text output file to the specified location. Note, this function
+            should only be called if the text output was enabled prior to the call to
+            Recognize.
+            </summary>
+            <param name="fileName">Name of file to save output as</param>
+            <param name="overwriteExisting">True to overwrite any exiting file</param>
+            <returns>Success</returns>
+            <exception cref="T:System.MissingFieldException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadDocumentString">
+            <summary>
+             Returns a string containing the words from all pages processed.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.SaveRTFOutput(System.String,System.Boolean)">
+            <summary>
+            Save RTF output file to the specified location. Note, this function should only
+            be called if the RTF output was enabled prior to the call to Recognize.
+            </summary>
+            <param name="fileName">Name of file to save output as</param>
+            <param name="overwriteExisting">True to overwrite any exiting file</param>
+            <returns>Success</returns>
+            <exception cref="T:System.MissingFieldException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadPageWords(System.Int32)">
+            <summary>
+             This function will retrieve a Words object representing the words found for the
+             page requested. Note, this should be called only after OCR has completed
+             successfully for the page.
+            </summary>
+            <param name="pageNumber">Page number to retrieve Words from.</param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadPageWords(System.Int32,System.Drawing.Rectangle)">
+            <summary>
+             This function will retrieve a Words object representing the words found for the
+             page requested and in the region specified. Note, this should be called only
+             after OCR has completed successfully for the page.
+            </summary>
+            <param name="pageNumber">Page number to retrieve Words from.</param>
+            <param name="region">Region to retrieve Words from.</param>
+            <returns>A Words object for the specified page/region.</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadPageString(System.Int32,System.Drawing.Rectangle)">
+            <summary>
+             This function will retrieve a string representing the words found for the page
+             requested and in the region specified. Note, this should be called only after
+             OCR has completed successfully for the page.
+            </summary>
+            <param name="pageNumber">Page number to retrieve string from.</param>
+            <param name="region">Region to retrieve string from.</param>
+            <returns>A string containing the words.</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.ReadPageString(System.Int32)">
+            <summary>
+             This function will retrieve a string representing the words found for the page
+             requested. Note, this should be called only after OCR has completed
+             successfully for the page.
+            </summary>
+            <param name="pageNumber">Page number to retrieve string from.</param>
+            <returns>A string containing the words.</returns>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.Abort">
+            <summary>
+             Terminates an ongoing call to Recognize.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.GetPageImage(System.Int32)">
+            <summary>
+            Retrieves the image for the specified page.
+            </summary>
+            <param name="pageNumber">Page number</param>
+            <returns>System.Drawing.Image containing the </returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.AppendPDFOutputToMerger(Aquaforest.OCR.Api.PdfMerger)">
+            <summary>
+             Appends the current output to the PDF file being processed by the PdfMerger 
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.Ocr.DeleteTemporaryFiles">
+            <summary>
+            Delete temporary files used in the OCR processing
+            </summary>
+        </member>
+        <member name="E:Aquaforest.OCR.Api.Ocr.PageCompleted">
+            <summary>
+            This event is raised when processing of a page is complete. 
+            </summary>
+            <exclude/>
+        </member>
+        <member name="E:Aquaforest.OCR.Api.Ocr.StatusUpdate">
+            <summary>
+            This event is raised when processing of a page is complete. The StatusUpdateEventArgs object provides access to information relating to the status of the page processed.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.Language">
+            <summary>
+             Sets the language to be used for the OCR processing. 
+             This takes a value from the enumeration SupportedLanguages which is defined in the API. 
+             Default language is English.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.EnablePdfOutput">
+            <summary>
+             Enables or disables the production of Portable Document Format output. 
+             Default value is false (disabled).
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.EnableTextOutput">
+            <summary>
+             Enables or disables the production of simple text final output.
+             Default value is true (enabled).
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.EnableRtfOutput">
+            <summary>
+             Enables or disables the production of Rich Text Format output.
+             Default value is false (disabled).
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.TempFolder">
+            <summary>
+             Specifies a temporary folder for storing bitmap images and intermediate output during OCR processing. 
+             If this is not specified, the first of the following environment variables that is defined will be used : TMP, TMPDIR, TEMP.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.StartPage">
+            <summary>
+             Sets the first page of the source file that the OCR process will be begin from (for a multipage source).
+             Throws an ArgumentOutOfRangeException if a source file has not been set already (by using the ReadBMPSource or 
+             ReadTIFFSource method prior to setting this property) or if the page is greater than the number of pages in the source. 
+             By default the whole of the document will be processed.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.EndPage">
+            <summary>
+             Sets the last page of the source file that the OCR process will be run to (for a multipage source). 
+             Throws an ArgumentOutOfRangeException if a source file has not been set already (by using the ReadBMPSource or 
+             ReadTIFFSource method prior to setting this property) or if the page is greater than the number of pages in the source. 
+             By default the whole of the document will be processed.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.CurrentPage">
+            <summary>
+             Returns the current page for which the OCR has been performed. 
+             This is useful only when using Recognize() in another thread.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.NumberPages">
+            <summary>
+             Returns the number pages in a document.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.ResourceFolder">
+            <summary>
+             This property can optionally be used to set the location of the resources folder when the resources are not located in the same folder as the assembly using the API.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.HandleExceptionsInternally">
+            <summary>
+             When set to true the OCR object will catch any exceptions for method calls and simply return false from the method. 
+             The exceptions caught are stored in the LastException property overwriting any previous value.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.LastException">
+            <summary>
+             Stores last exception caught by the OCR object.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.EnableConsoleOutput">
+            <summary>
+             If enabled then progress messages will be sent to the console. Default is false.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.License">
+            <summary>
+             Specifies the license key
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.EnableDebugOutput">
+            <summary>
+             If set to a value greater than 0 (default value) debug messages will be written to the console output. 
+             Please contact Aquaforest for guidance on suitable values if you need to generate debug output.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.Version">
+            <summary>
+             Returns the version of the Ocr Controller
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.RemoveExistingPDFText">
+            <summary>
+             This applies only when a PDF is being used as the source for OCR. When set to
+             true this will not include any searchable text that already  exists text from
+             the source document. Such functionality might be useful if the source document
+             was created by OCR of an image only PDF or other image  file and the quality of
+             the text from the previous OCR is poor. NOTE: There is no way to distinguish
+             text added as a result of OCR from text added by other means and as a result
+             this option should be used with care.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.DeleteTemporaryFilesOnPageCompletion">
+            <summary>
+             When set to true the temporary files generated for each page during OCR processing will be removed as soon as the OCR engine has finished with them*.
+             
+            *Note: the OCR engine is finished with the temporary files for a page as soon as the output for that page is added to the overall output. 
+            If you wish to use functionality such as ReadPageWords, GetPageImage, etc then this will require that the temporary files are available for the
+            page requested and so will fail if DeleteTemporaryFilesOnPageCompletion is true.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.Dotmatrix">
+            <summary>
+             Set this to true to improve recognition of dot-matrix fonts. 
+             Default value is false. If set to true for non dot-matrix fonts then the recognition can be poor.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.OneColumn">
+            <summary>
+             The default value for this is true which improves the handling of single column text. 
+             Better handling of multi-column text such as magazine or news print can be achieved.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.AdvancedPreProcessing">
+            <summary>
+             When set to true the engine will use the different image pre-processing sets declared in Properties.xml and choose the best result.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.OptimiseOcr">
+            <summary>
+            'OptimiseOcr' is deprecated. Use 'AdvancedPreProcessing' instead.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.RetainTiffCreationDate">
+            <summary>
+            Retains the creation date of the source TIFF file in the output PDF document
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.Ocr.CreationDate">
+            <summary>
+            Set a custom creation date for the output PDF document.
+            Note: This will only work if the source file is TIFF.
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Api.Ocr.PageCompletedHandler">
+            <summary>
+            
+            </summary>
+            <param name="pageNumber">Indicates which page has just completed</param>
+            <param name="textAvailable">Indicates whether text was found on the page</param>
+            <param name="imageAvailable">Indicates whether an image(after all appropriate pre-processing) was successfully extracted</param>
+            <param name="blankPage">Indicates whether the page was detected as blank</param>
+            <exclude/>
+        </member>
+        <member name="T:Aquaforest.OCR.Api.PdfMerger">
+            <summary>
+            This class can be used to merge two PDFs
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.PdfMerger.#ctor(System.String)">
+            <summary>
+            Used to instatiate the PdfMerger Object.
+            </summary>
+            <param name="destinationFile">The name of the out put file</param>
+            <example>The following is an example of initializing a 
+            <c>PdfMerger</c> type:
+              <code>
+               PdfMerger pdfMerger = new PdfMerger("C:\\out\\Merged.pdf");
+              </code>
+            </example>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.PdfMerger.Append(System.String)">
+            <summary>
+            Appends the document specified to the in memory PDF document.
+            </summary>
+            <param name="pdfFileToAdd">The file name of the Pdf to append</param>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.PdfMerger.Close">
+            <summary>
+            Writes the output to the file specified in the constructor.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.PdfMerger.Dispose">
+            <summary>
+            Clears any resources not yet released. This is useful if Close (which will automatically free such resources) is not called, 
+            for example if as a result of an error you do not wish to write the merged output.
+            </summary>
+        </member>
+        <member name="T:Aquaforest.OCR.Api.PreProcessor">
+            <summary>
+            A PreProcessor object, which must be created and passed to the Ocr object, controls all of the pre-processing that can be performed on the input image in order to improve the quality of the output.
+            Instantiation of the PreProcessor object will initialise a default set of pre-processing options which result in minimal image manipulation.
+            </summary>
+        </member>
+        <member name="M:Aquaforest.OCR.Api.PreProcessor.ConfigurePDFStamp(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},Aquaforest.OCR.Definitions.Enums.PagePositionEnum,Aquaforest.OCR.Definitions.Enums.StampType)">
+             <summary>
+             Using this method stamps can be configured to be added to each page of the PDF output.
+             Thus a stamp with Prefix = “Beginning”, Start = “1”, Digits = “4” and Suffix = “End” would produce the text “Beginning0001End” on the first page.
+             Any one of these can be set to null resulting in the exclusion of that part from the final text.
+             </summary>
+             <param name="prefix">A string to be added to the beginning of the stamp, before the number section.</param>
+             <param name="suffix">Suffix - a string to be added to the end of the stamp, after the number section.</param>
+             <param name="start">The value that the number portion of the stamp should start at. The number portion will be incremented by 1 each page.</param>
+             <param name="digits">Digits – a value indicating the minimum length that the number portion of the stamp should be displayed as.
+             Preceding 0’s will be used to pad any numbers less than this whilst numbers greater than this will be displayed in full.</param>
+             <param name="position">Additionally the stamp can be added either as visible searchable text or as an image and can be positioned in one of the following:
+            -Top Left
+            -Top Centre
+            -Top Right
+            -Centre Left
+            -Centre
+            -Centre Right
+            -Bottom Left
+            -Bottom Centre
+            -Bottom Right</param>
+             <param name="stampType">An Enumeration Specifying whether the stamp is a text or an image</param>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.BlankPageThreshold">
+            <summary>
+             Use this to set the minimum number of "On Pixels" that must be 
+             present in the image for a page not to be considered blank.
+             A value of -1 will turn off blank page detection.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.Deskew">
+            <summary>
+             Deskew (straighten) the image. The default value is false (disabled).
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.Autorotate">
+            <summary>
+             Auto-rotate the image – this will ensure all text oriented normally. 
+             The default value is false (disabled). 
+             Note: When using a PDF source Autorotation will be disabled on any pages already containing text..
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.NoPictures">
+            <summary>
+             Use this to set the minimum number of "On Pixels" that must be 
+             present in the image for a page not to be considered blank.
+             A value of -1 will turn off blank page detection.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.Binarize">
+            <summary>
+            This value should generally only be used under guidance from technical support. 
+            It can control the way that color images are processed and force binarization with a particular threshold.
+            A value of 200 has been shown to generally give good results in testing, but this should be confirmed with “typical” customer documents.
+            By setting this to -1 an alternative method is used which will attempt to separate the text from any background images or colors. 
+            This can give improved OCR results for certain documents such as newspaper and magazine pages.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.Tables">
+            <summary>
+             This option when set to true, tries to ocr within table cells
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.Despeckle">
+            <summary>
+             Despeckle the image – The method removes all disconnected elements within the image that have height or width in pixels less than the specified figure.
+             The maximum value is 9 and the default value is 0.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.BoxSize">
+            <summary>
+             This option is ideal for forms where sometimes boxes around text can cause an area to be identified as graphics.
+             This option removes boxes from the temporary copy of the imaged used by the OCR engine. 
+             It does not remove boxes from the final image. 
+             Technically, this option removes connected elements with a minimum area (in pixels and defined by this property). 
+             This option is currently only applied for bitonal images.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.Morph">
+            <summary>
+             Image Morphology. This option should generally only be used under guidance from technical support.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.MRCForegroundFactor">
+            <summary>
+            Sampling size for the foreground portion of the image. 
+            The higher the number, the larger the size of the image blocks used for averaging which will result in a reduction in size but also quality.
+            Default value is 3
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.MRCBackgroundFactor">
+            <summary>
+             Sampling size for the background portion of the image. 
+             The higher the number, the larger the size of the image blocks used for averaging which will result in a reduction in size but also quality.
+             Default value is 3
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.MRCQuality">
+            <summary>
+            JPEG quality setting (percentage value 1 - 100) for use in saving the background and foreground images. Default value is 75
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.MRC">
+            <summary>
+             This enables Mixed Raster Compression which can dramatically
+            reduce the output size of PDFs comprising color scans.
+            Note that this option is only suitable when the source is not a PDF.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.RemoveLines">
+            <summary>
+             Use this to set the minimum number of "On Pixels" that must be 
+             present in the image for a page not to be considered blank.
+             A value of -1 will turn off blank page detection.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.ConvertToTiff">
+            <summary>
+            Each page in the PDF document is rasterized to a TIFF image.
+            </summary>
+        </member>
+        <member name="P:Aquaforest.OCR.Api.PreProcessor.LibTiffSavePageAsBmp">
+            <summary>
+            Sometimes if there is an image which is 1bpp and has LZW compression, the pre-processing can cause
+            the colour of the image to be inverted (black to white and white to black).
+            Set this to true to avoid this.
+            </summary>
+        </member>
+    </members>
+</doc>
