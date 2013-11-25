@@ -16,7 +16,8 @@ namespace OCRWebApi.Models
         public string ModelId { get; set; }
         public string Model { get; set; }
         public string Trim { get; set; }
-        public string StyleId { get; set; } 
+        public string StyleId { get; set; }
+        public string Style { get; set; }
         public string OEMCode { get; set; }
 
     }

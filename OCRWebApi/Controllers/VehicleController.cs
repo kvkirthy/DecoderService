@@ -18,7 +18,12 @@ namespace OCRWebApi.Controllers
 
         public object Get(string vin)
         {
-           return _vehicleFacade.GetVehicleByVin(vin);
+           return _vehicleFacade.GetYearMakeModelByVin(vin);
+        }
+
+        public object Get(string year, string make, string model)
+        {
+            return _vehicleFacade.GetTaxonomyRecordsByYearMakeModel(year, make, model);
         }
 
     }
