@@ -147,6 +147,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BarcodeController.cs" />
     <Compile Include="Controllers\OcrController.cs" />
+    <Compile Include="Controllers\OptionsController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
@@ -155,6 +156,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\IVehicleFacade.cs" />
+    <Compile Include="Models\OptionsEntity.cs" />
     <Compile Include="Models\RestClient.cs" />
     <Compile Include="Models\VehicleEntity.cs" />
     <Compile Include="Models\VehicleRestClient.cs" />

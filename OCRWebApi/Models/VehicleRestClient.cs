@@ -41,6 +41,55 @@ namespace OCRWebApi.Models
             return GetTaxonomyListByParsingJson(RestClient.GetData(requestUri));
         }
 
+        public IEnumerable<OptionsEntity> GetOptionsByStyleId(string styleId)
+        {
+            //TODO: pull URL from configuration file.
+            var requestUri = string.Format("https://api.dev-2.cobalt.com/inventory/rest/v1.0/reference/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&loadColors=true&styleId={0}", styleId);
+            return GetOptionsListByParsingJson(RestClient.GetData(requestUri));
+        }
+
+        private IEnumerable<OptionsEntity> GetOptionsListByParsingJson(JObject json)
+        {
+            var optionsResults = new List<OptionsEntity>();
+            var responseObject = json.ToObject<dynamic>();
+
+            if (responseObject != null)
+            {
+                if (responseObject.searchResult != null)
+                {
+                    if (responseObject.searchResult.referenceStyles != null
+                        && responseObject.searchResult.referenceStyles != null
+                        && responseObject.searchResult.referenceStyles.GetType() == typeof(JArray))
+                    {
+                        foreach (var option in responseObject.searchResult.referenceStyles)
+                        {
+                            if (option.options != null
+                                && option.options.factoryOptions != null
+                                && option.options.factoryOptions.GetType() == typeof(JArray))
+                            {
+                                foreach (var factoryOption in option.options.factoryOptions)
+                                {
+                                    if (factoryOption.optionCode != null
+                                        && factoryOption.optionCode.Value != null
+                                        && factoryOption.description != null
+                                        && factoryOption.description.Value != null)
+                                    {
+                                        optionsResults.Add(new OptionsEntity
+                                        {
+                                            OptionCode = factoryOption.optionCode.Value,
+                                            Description = factoryOption.description.Value
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return optionsResults;
+        }
+
         private IEnumerable<VehicleEntity> GetTaxonomyListByParsingJson(JObject json)
         {
             var taxonomyResults = new List<VehicleEntity>();
@@ -99,6 +148,7 @@ namespace OCRWebApi.Models
             
         }
 
+        
         #region Parse individual Vehicle Objects from JSON
             private void TryGetMake(dynamic jsonObject, VehicleEntity vehicle)
             {
@@ -212,5 +262,8 @@ namespace OCRWebApi.Models
             }
 
         #endregion Parse individual Vehicle Objects from JSON
+
+
+          
     }
 }

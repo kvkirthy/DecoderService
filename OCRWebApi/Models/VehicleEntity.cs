@@ -19,6 +19,7 @@ namespace OCRWebApi.Models
         public string StyleId { get; set; }
         public string Style { get; set; }
         public string OEMCode { get; set; }
+        public IEnumerable<OptionsEntity> Options{ get; set; }
 
     }
 }
