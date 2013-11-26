@@ -41,11 +41,74 @@ namespace OCRWebApi.Models
             return GetTaxonomyListByParsingJson(RestClient.GetData(requestUri));
         }
 
-        public IEnumerable<OptionsEntity> GetOptionsByStyleId(string styleId)
+        public ReferenceDataEntity GetOptionsByStyleId(string styleId)
         {
             //TODO: pull URL from configuration file.
             var requestUri = string.Format("https://api.dev-2.cobalt.com/inventory/rest/v1.0/reference/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&loadColors=true&styleId={0}", styleId);
-            return GetOptionsListByParsingJson(RestClient.GetData(requestUri));
+            var jsonResult = RestClient.GetData(requestUri);
+            return new ReferenceDataEntity{
+                Colors = GetColorReferenceEntities(jsonResult),
+                Options = GetOptionsListByParsingJson(jsonResult)
+            };            
+        }
+
+        //TODO: Still need to cleanup Colors. They could be repeated now.
+        private IEnumerable<ColorReferenceEntity> GetColorReferenceEntities(JObject json)
+        {
+            var colorResults = new List<ColorReferenceEntity>();
+            var responseObject = json.ToObject<dynamic>();
+
+            if (responseObject != null)
+            {
+                if (responseObject.searchResult != null)
+                {
+                    if (responseObject.searchResult.referenceStyles != null
+                        && responseObject.searchResult.referenceStyles != null
+                        && responseObject.searchResult.referenceStyles.GetType() == typeof(JArray))
+                    {
+                        foreach (var refStyles in responseObject.searchResult.referenceStyles)
+                        {
+                            if (refStyles.colors != null && refStyles.colors.GetType() == typeof(JArray))
+                            {
+                                foreach (var color in refStyles.colors)
+                                {
+                                    var colorRefObject = new ColorReferenceEntity();
+                                    if (color.exterior != null)
+                                    {
+                                        var colorObject = new Color
+                                        {
+                                            Code = color.exterior.code ?? string.Empty,
+                                            //Base = color.exterior.base ?? string.Empty,
+                                            Name = color.exterior.name ?? string.Empty,
+                                            RgbHexCode = color.exterior.RGBHexCode ?? string.Empty
+                                        };
+                                        colorRefObject.ExternalColor = colorObject;
+
+                                    }
+                                    if (color.interior != null)
+                                    {
+                                        var colorObject = new Color
+                                        {
+                                            Code = color.interior.code ?? string.Empty,
+                                            //Base = color.exterior.base ?? string.Empty,
+                                            Name = color.interior.name ?? string.Empty,
+                                            RgbHexCode = color.interior.RGBHexCode ?? string.Empty
+                                        };
+                                        colorRefObject.InternalColor = new List<Color>(){
+                                            colorObject
+                                        };
+                                    }
+
+                                    colorResults.Add(colorRefObject);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            return colorResults;
         }
 
         private IEnumerable<OptionsEntity> GetOptionsListByParsingJson(JObject json)
@@ -120,7 +183,6 @@ namespace OCRWebApi.Models
             }
 
             return taxonomyResults;
-
         }
 
         /// <summary>

@@ -51,7 +51,6 @@ C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRW
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.dll
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.pdb
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\OCRWebApi.dll.config
-C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.csprojResolveAssemblyReference.cache
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\Microsoft.Practices.ServiceLocation.dll
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\StructureMap.dll
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\WebActivator.dll

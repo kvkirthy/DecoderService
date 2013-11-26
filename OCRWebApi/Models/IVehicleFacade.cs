@@ -10,7 +10,7 @@ namespace OCRWebApi.Models
     {
         VehicleEntity GetYearMakeModelByVin(string vin);
         IEnumerable<VehicleEntity> GetTaxonomyRecordsByYearMakeModel(string year, string make, string model);
-        IEnumerable<OptionsEntity> GetOptionsByStyleId(string styleId);
+        ReferenceDataEntity GetOptionsByStyleId(string styleId);
         
     }
 }

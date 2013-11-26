@@ -155,8 +155,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Color.cs" />
+    <Compile Include="Models\ColorReferenceEntity.cs" />
     <Compile Include="Models\IVehicleFacade.cs" />
     <Compile Include="Models\OptionsEntity.cs" />
+    <Compile Include="Models\ReferenceDataEntity.cs" />
     <Compile Include="Models\RestClient.cs" />
     <Compile Include="Models\VehicleEntity.cs" />
     <Compile Include="Models\VehicleRestClient.cs" />
