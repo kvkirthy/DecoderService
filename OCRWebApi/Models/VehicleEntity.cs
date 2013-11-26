@@ -10,7 +10,7 @@ namespace OCRWebApi.Models
     {        
         public string Vin { get; set; }
         public string StockNumber { get; set; }
-        public DateTime Year { get; set; }
+        public int Year { get; set; }
         public string MakeId { get; set; }
         public string Make { get; set; }
         public string ModelId { get; set; }

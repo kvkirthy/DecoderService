@@ -14,6 +14,50 @@ namespace OCRWebApi.Models
 
         }
 
+        public VehicleEntity CreateVehicle(VehicleEntity newVehicle)
+        {
+            //string requestPayload = string.Format("{{\"vehicles\":[{{\"vehicle\":{{\"vin\":\"{0}\",\"year\":{1},\"make\":{{\"id\":{2},\"label\":\"{3}\"},\"model\":{{\"id\":{4},\"label\":\"{5}\"}},\"style\":{{\"id\":{6},\"label\":\"{7}\",\"trim\":\"{8}\"}},\"oemModelCode\":\"{9}\"}}]}}"
+                //, newVehicle.Vin, newVehicle.Year, newVehicle.MakeId, newVehicle.Make, newVehicle.ModelId, newVehicle.Model, newVehicle.StyleId, newVehicle.Style, newVehicle.Trim, newVehicle.OEMCode);
+
+            string colorPayload = "\"colors\":[{0}]", optionsPayload = null;
+
+            var basicVehiclePayload = "\"vin\":\"" + (newVehicle.Vin ?? string.Empty) + "\",\"year\":" + (newVehicle.Year.ToString() ?? string.Empty) + ",\"make\":{\"id\":" + (newVehicle.MakeId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Make ?? string.Empty) +
+                "\"},\"model\":{\"id\":" + (newVehicle.ModelId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Model ?? string.Empty) + "\"},\"style\":{\"id\":" + (newVehicle.StyleId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Style ?? string.Empty) + "\",\"trim\":\"" + (newVehicle.Trim ?? string.Empty) + "\"},\"oemModelCode\":\"" + (newVehicle.OEMCode ?? string.Empty) + "\"";//}]}";
+
+            if (newVehicle.ExternalColor != null && newVehicle.InternalColor != null)
+            {                
+                //TODO: using name for base color too. might need to fix it.
+                var twoColorsOfTheVehicle = string.Format("{{\"color\":{{\"category\":\"Exterior\",\"name\":\"{0}\",\"base\":\"{0}\",\"code\":\"{1}\"}} }},{{\"color\":{{\"code\":\"{2}\",\"name\":\"{2}\",\"category\":\"Interior\"}} }}", newVehicle.ExternalColor.Name ?? string.Empty, newVehicle.ExternalColor.Code ?? string.Empty, newVehicle.InternalColor.Code ?? string.Empty, newVehicle.InternalColor.Name ?? string.Empty);
+                colorPayload = string.Format(colorPayload, twoColorsOfTheVehicle);
+            }
+            else
+            {
+                colorPayload = string.Format(colorPayload, string.Empty);
+            }
+
+            string factoryOptionsArray = string.Empty;
+            if (newVehicle.Options != null)
+            {
+                factoryOptionsArray = "\"factoryOptions\":[";
+                foreach (var option in newVehicle.Options)
+                {
+                    var factoryOptionEntity = string.Format("{\"id\":4,\"optionCode\":\"{0}\",\"description\":\"{1}\"}", option.OptionCode, option.Description);
+                    factoryOptionsArray = string.Format("{0},{1}", factoryOptionsArray, factoryOptionEntity);
+                }
+                factoryOptionsArray = string.Format("{0}]", factoryOptionsArray);
+            }
+            optionsPayload = string.Format("\"options\":{{{0}}}", factoryOptionsArray);
+
+            var requestPayload = string.Format("{{\"vehicles\":[{{\"vehicle\":{{{0},{1},{2}}} }}]}}", basicVehiclePayload, colorPayload, optionsPayload);
+            //TODO: move uri to configuration file
+            var requestUri = "https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
+            var result = RestClient.PostData(requestUri, requestPayload);
+
+
+            return null;
+
+        }
+
         /// <summary>
         /// Obtain vehicle record by VIN
         /// </summary>
@@ -269,8 +313,7 @@ namespace OCRWebApi.Models
                     {
                         int year;
                         Int32.TryParse(jsonObject.year.Value.ToString(), out year);
-                        vehicle.Year = new DateTime(year, 1, 1);
-
+                        vehicle.Year = year;
                     }
                 }
                 catch
@@ -326,6 +369,8 @@ namespace OCRWebApi.Models
         #endregion Parse individual Vehicle Objects from JSON
 
 
-          
+
+
+    
     }
 }

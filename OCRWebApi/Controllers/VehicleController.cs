@@ -16,6 +16,11 @@ namespace OCRWebApi.Controllers
             _vehicleFacade = vehicleFacade;
         }
 
+        public object Post(VehicleEntity vehicle)
+        {
+            return _vehicleFacade.CreateVehicle(vehicle);
+        }
+
         public object Get(string vin)
         {
            return _vehicleFacade.GetYearMakeModelByVin(vin);

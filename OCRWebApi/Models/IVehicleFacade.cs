@@ -8,6 +8,7 @@ namespace OCRWebApi.Models
 {
     public interface IVehicleFacade
     {
+        VehicleEntity CreateVehicle(VehicleEntity newVehicle);
         VehicleEntity GetYearMakeModelByVin(string vin);
         IEnumerable<VehicleEntity> GetTaxonomyRecordsByYearMakeModel(string year, string make, string model);
         ReferenceDataEntity GetOptionsByStyleId(string styleId);
