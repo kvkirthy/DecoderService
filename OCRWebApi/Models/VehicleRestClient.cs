@@ -7,6 +7,7 @@ using System.Web;
 
 namespace OCRWebApi.Models
 {
+    //TODO: All if's while parsing need to have else with error logged when parsing fails.
     public class VehicleRestClient : IVehicleFacade
     {
         public VehicleRestClient()
@@ -16,45 +17,80 @@ namespace OCRWebApi.Models
 
         public VehicleEntity CreateVehicle(VehicleEntity newVehicle)
         {
-            //string requestPayload = string.Format("{{\"vehicles\":[{{\"vehicle\":{{\"vin\":\"{0}\",\"year\":{1},\"make\":{{\"id\":{2},\"label\":\"{3}\"},\"model\":{{\"id\":{4},\"label\":\"{5}\"}},\"style\":{{\"id\":{6},\"label\":\"{7}\",\"trim\":\"{8}\"}},\"oemModelCode\":\"{9}\"}}]}}"
-                //, newVehicle.Vin, newVehicle.Year, newVehicle.MakeId, newVehicle.Make, newVehicle.ModelId, newVehicle.Model, newVehicle.StyleId, newVehicle.Style, newVehicle.Trim, newVehicle.OEMCode);
+            var resultVehicleEntity = new VehicleEntity(); 
 
-            string colorPayload = "\"colors\":[{0}]", optionsPayload = null;
-
-            var basicVehiclePayload = "\"vin\":\"" + (newVehicle.Vin ?? string.Empty) + "\",\"year\":" + (newVehicle.Year.ToString() ?? string.Empty) + ",\"make\":{\"id\":" + (newVehicle.MakeId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Make ?? string.Empty) +
-                "\"},\"model\":{\"id\":" + (newVehicle.ModelId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Model ?? string.Empty) + "\"},\"style\":{\"id\":" + (newVehicle.StyleId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Style ?? string.Empty) + "\",\"trim\":\"" + (newVehicle.Trim ?? string.Empty) + "\"},\"oemModelCode\":\"" + (newVehicle.OEMCode ?? string.Empty) + "\"";//}]}";
-
-            if (newVehicle.ExternalColor != null && newVehicle.InternalColor != null)
-            {                
-                //TODO: using name for base color too. might need to fix it.
-                var twoColorsOfTheVehicle = string.Format("{{\"color\":{{\"category\":\"Exterior\",\"name\":\"{0}\",\"base\":\"{0}\",\"code\":\"{1}\"}} }},{{\"color\":{{\"code\":\"{2}\",\"name\":\"{2}\",\"category\":\"Interior\"}} }}", newVehicle.ExternalColor.Name ?? string.Empty, newVehicle.ExternalColor.Code ?? string.Empty, newVehicle.InternalColor.Code ?? string.Empty, newVehicle.InternalColor.Name ?? string.Empty);
-                colorPayload = string.Format(colorPayload, twoColorsOfTheVehicle);
-            }
-            else
-            {
-                colorPayload = string.Format(colorPayload, string.Empty);
-            }
-
-            string factoryOptionsArray = string.Empty;
-            if (newVehicle.Options != null)
-            {
-                factoryOptionsArray = "\"factoryOptions\":[";
-                foreach (var option in newVehicle.Options)
-                {
-                    var factoryOptionEntity = string.Format("{\"id\":4,\"optionCode\":\"{0}\",\"description\":\"{1}\"}", option.OptionCode, option.Description);
-                    factoryOptionsArray = string.Format("{0},{1}", factoryOptionsArray, factoryOptionEntity);
-                }
-                factoryOptionsArray = string.Format("{0}]", factoryOptionsArray);
-            }
-            optionsPayload = string.Format("\"options\":{{{0}}}", factoryOptionsArray);
-
-            var requestPayload = string.Format("{{\"vehicles\":[{{\"vehicle\":{{{0},{1},{2}}} }}]}}", basicVehiclePayload, colorPayload, optionsPayload);
+            #region Detailer Call
             //TODO: move uri to configuration file
             var requestUri = "https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
-            var result = RestClient.PostData(requestUri, requestPayload);
+            dynamic detailerResponse = RestClient.PostData(requestUri, GetDetailerRequestPayload(newVehicle));
+            #endregion Detailer call
 
+            #region Create Vehicle Call
+                        if (detailerResponse.vehicles != null && detailerResponse.vehicles.GetType() == typeof(JArray)
+                            && detailerResponse.vehicles[0] != null && detailerResponse.vehicles[0].vehicle != null)
+                        {
+                            JObject vehicleEntity = detailerResponse.vehicles[0].vehicle;
+                            vehicleEntity.Add("stockNumber", newVehicle.StockNumber ?? string.Empty);
+                            var createVehicleRequestPayload = string.Format("{{\"criteria\":{{\"vehicleContexts\":[{{\"vehicleContext\":{{\"vehicle\":{0},\"modifiedFields\":[\"assets\",\"bodyStyle\",\"bodyType\",\"certified\",\"colors.exterior.base\",\"colors.exterior.code\",\"colors.exterior.name\",\"colors.interior.code\",\"colors.interior.name\",\"createdDate\",\"descriptions\",\"doors\",\"drivetrain\",\"engine.aspiration\",\"engine.cylinders\",\"engine.description\",\"engine.displacement\",\"engine.fuelType\",\"engine.power\",\"id\",\"inventoryOwner\",\"lastModifiedDate\",\"lotDate\",\"make.Id\",\"make.label\",\"model.Id\",\"model.label\",\"odometer\",\"oemModelCode\",\"options.dealerOptions\",\"options.factoryOptions\",\"preOwned\",\"prices.discountPrice\",\"prices.internetPrice\",\"prices.invoicePrice\",\"prices.msrp\",\"prices.retailPrice\",\"prices.vendedPrice\",\"stockNumber\",\"style.Id\",\"style.trim\",\"transmission.speeds\",\"transmission.text\",\"transmission.type\",\"unmodifiable\",\"vin\",\"warranties\",\"year\"]}}}}],\"inventoryOwner\":\"gmps-kindred\"}}}}", 
+                                vehicleEntity);
+                            //TODO: move uri to configuration file
+                            dynamic result = RestClient.PostData("https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles?inventoryOwner=gmps-kindred", createVehicleRequestPayload);
 
-            return null;
+                            if (result != null && result.result != null)
+                            {
+                                result = result.result;
+                                if (result != null
+                                    && result.status != null
+                                    && result.status.GetType() == typeof(JArray)
+                                    && result.status[0].vehicle != null)
+                                {
+                                    TryGetMake(result.status[0].vehicle, resultVehicleEntity);
+                                    TryGetModel(result.status[0].vehicle, resultVehicleEntity);
+                                    TryGetOemModelCode(result.status[0].vehicle, resultVehicleEntity);
+                                    TryGetTrimAndStyle(result.status[0].vehicle, resultVehicleEntity);
+                                    TryGetYear(result.status[0].vehicle, resultVehicleEntity);
+
+                                    #region Get Color from response
+                                    var refStyles = result.status[0].vehicle;
+                                    if (refStyles.colors != null && refStyles.colors.GetType() == typeof(JArray))
+                                    {
+                                        foreach (var iColor in refStyles.colors)
+                                        {
+                                            var color = iColor.color;
+                                            var colorRefObject = new ColorReferenceEntity();
+
+                                            if (color.category != null && color.category == "Exterior")
+                                            {
+                                                resultVehicleEntity.ExternalColor = new Color
+                                                {
+                                                    Code = color.code ?? string.Empty,
+                                                    //Base = color.exterior.base ?? string.Empty,
+                                                    Name = color.name ?? string.Empty,
+                                                    RgbHexCode = color.RGBHexCode ?? string.Empty
+                                                };
+                                            }
+
+                                            if (color.category != null && color.category == "Interior")
+                                            {
+                                                resultVehicleEntity.InternalColor = new Color
+                                                {
+                                                    Code = color.code ?? string.Empty,
+                                                    //Base = color.exterior.base ?? string.Empty,
+                                                    Name = color.name ?? string.Empty,
+                                                    RgbHexCode = color.RGBHexCode ?? string.Empty
+                                                };                                          
+                                            }                                            
+                                        }
+                                    }
+                                   
+                                    #endregion Get Color from response
+                                }
+                            }
+                        }
+            
+            #endregion Create Vehicle Call
+            
+            return resultVehicleEntity;
 
         }
 
@@ -96,6 +132,40 @@ namespace OCRWebApi.Models
             };            
         }
 
+        private string GetDetailerRequestPayload(VehicleEntity newVehicle)
+        {
+            string colorPayload = "\"colors\":[{0}]", optionsPayload = null;
+
+            var basicVehiclePayload = "\"vin\":\"" + (newVehicle.Vin ?? string.Empty) + "\",\"year\":" + (newVehicle.Year.ToString() ?? string.Empty) + ",\"make\":{\"id\":" + (newVehicle.MakeId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Make ?? string.Empty) +
+                "\"},\"model\":{\"id\":" + (newVehicle.ModelId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Model ?? string.Empty) + "\"},\"style\":{\"id\":" + (newVehicle.StyleId ?? string.Empty) + ",\"label\":\"" + (newVehicle.Style ?? string.Empty) + "\",\"trim\":\"" + (newVehicle.Trim ?? string.Empty) + "\"},\"oemModelCode\":\"" + (newVehicle.OEMCode ?? string.Empty) + "\"";//}]}";
+
+            if (newVehicle.ExternalColor != null && newVehicle.InternalColor != null)
+            {
+                //TODO: using name for base color too. might need to fix it.
+                var twoColorsOfTheVehicle = string.Format("{{\"color\":{{\"category\":\"Exterior\",\"name\":\"{0}\",\"base\":\"{0}\",\"code\":\"{1}\"}} }},{{\"color\":{{\"code\":\"{2}\",\"name\":\"{2}\",\"category\":\"Interior\"}} }}", newVehicle.ExternalColor.Name ?? string.Empty, newVehicle.ExternalColor.Code ?? string.Empty, newVehicle.InternalColor.Code ?? string.Empty, newVehicle.InternalColor.Name ?? string.Empty);
+                colorPayload = string.Format(colorPayload, twoColorsOfTheVehicle);
+            }
+            else
+            {
+                colorPayload = string.Format(colorPayload, string.Empty);
+            }
+
+            string factoryOptionsArray = string.Empty;
+            if (newVehicle.Options != null)
+            {
+                factoryOptionsArray = "\"factoryOptions\":[";
+                foreach (var option in newVehicle.Options)
+                {
+                    var factoryOptionEntity = string.Format("{\"id\":4,\"optionCode\":\"{0}\",\"description\":\"{1}\"}", option.OptionCode, option.Description);
+                    factoryOptionsArray = string.Format("{0},{1}", factoryOptionsArray, factoryOptionEntity);
+                }
+                factoryOptionsArray = string.Format("{0}]", factoryOptionsArray);
+            }
+            optionsPayload = string.Format("\"options\":{{{0}}}", factoryOptionsArray);
+
+            return string.Format("{{\"vehicles\":[{{\"vehicle\":{{{0},{1},{2}}} }}]}}", basicVehiclePayload, colorPayload, optionsPayload);
+        }
+
         //TODO: Still need to cleanup Colors. They could be repeated now.
         private IEnumerable<ColorReferenceEntity> GetColorReferenceEntities(JObject json)
         {
@@ -112,41 +182,7 @@ namespace OCRWebApi.Models
                     {
                         foreach (var refStyles in responseObject.searchResult.referenceStyles)
                         {
-                            if (refStyles.colors != null && refStyles.colors.GetType() == typeof(JArray))
-                            {
-                                foreach (var color in refStyles.colors)
-                                {
-                                    var colorRefObject = new ColorReferenceEntity();
-                                    if (color.exterior != null)
-                                    {
-                                        var colorObject = new Color
-                                        {
-                                            Code = color.exterior.code ?? string.Empty,
-                                            //Base = color.exterior.base ?? string.Empty,
-                                            Name = color.exterior.name ?? string.Empty,
-                                            RgbHexCode = color.exterior.RGBHexCode ?? string.Empty
-                                        };
-                                        colorRefObject.ExternalColor = colorObject;
-
-                                    }
-                                    if (color.interior != null)
-                                    {
-                                        var colorObject = new Color
-                                        {
-                                            Code = color.interior.code ?? string.Empty,
-                                            //Base = color.exterior.base ?? string.Empty,
-                                            Name = color.interior.name ?? string.Empty,
-                                            RgbHexCode = color.interior.RGBHexCode ?? string.Empty
-                                        };
-                                        colorRefObject.InternalColor = new List<Color>(){
-                                            colorObject
-                                        };
-                                    }
-
-                                    colorResults.Add(colorRefObject);
-                                }
-
-                            }
+                            TryGetColors(refStyles, colorResults);
                         }
                     }
                 }
@@ -366,11 +402,48 @@ namespace OCRWebApi.Models
 
             }
 
+            private void TryGetColors(dynamic refStyles, List<ColorReferenceEntity> colorResults)
+            {
+                if (refStyles.colors != null && refStyles.colors.GetType() == typeof(JArray))
+                {
+                    foreach (var color in refStyles.colors)
+                    {                        
+                        var colorRefObject = new ColorReferenceEntity();                        
+
+                        if (color.exterior != null )
+                        {
+                            var colorObject = new Color
+                            {
+                                Code = color.exterior.code ?? string.Empty,
+                                //Base = color.exterior.base ?? string.Empty,
+                                Name = color.exterior.name ?? string.Empty,
+                                RgbHexCode = color.exterior.RGBHexCode ?? string.Empty
+                            };
+                            colorRefObject.ExternalColor = colorObject;
+
+                        }
+                        if (color.interior != null )
+                        {
+                            var colorObject = new Color
+                            {
+                                Code = color.interior.code ?? string.Empty,
+                                //Base = color.exterior.base ?? string.Empty,
+                                Name = color.interior.name ?? string.Empty,
+                                RgbHexCode = color.interior.RGBHexCode ?? string.Empty
+                            };
+                            colorRefObject.InternalColor = new List<Color>(){
+                                            colorObject
+                                        };
+                        }
+
+                        colorResults.Add(colorRefObject);
+                    }
+
+                }
+
+            }
+
         #endregion Parse individual Vehicle Objects from JSON
-
-
-
-
-    
+            
     }
 }
