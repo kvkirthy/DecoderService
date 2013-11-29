@@ -1,4 +1,3 @@
-C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.pdb
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\OCRWebApi.dll.config
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\OCRWebApi.dll
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\OCRWebApi.pdb
@@ -57,5 +56,6 @@ C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRW
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\System.Web.WebPages.Deployment.xml
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\System.Web.WebPages.Razor.xml
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\Aquaforest.OCR.Definitions.xml
-C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.csprojResolveAssemblyReference.cache
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.dll
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.pdb
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Debug\OCRWebApi.csprojResolveAssemblyReference.cache

@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -10,85 +11,108 @@ namespace OCRWebApi.Models
     //TODO: All if's while parsing need to have else with error logged when parsing fails.
     public class VehicleRestClient : IVehicleFacade
     {
-        public VehicleRestClient()
-        {
 
+        ILogger _logger;
+        public VehicleRestClient(ILogger log)
+        {
+            _logger = log;
         }
 
         public VehicleEntity CreateVehicle(VehicleEntity newVehicle)
-        {
-            var resultVehicleEntity = new VehicleEntity(); 
+        {            
+            var resultVehicleEntity = new VehicleEntity();
+            EventLogEntryType eventLogType = EventLogEntryType.Information;
 
-            #region Detailer Call
-            //TODO: move uri to configuration file
-            var requestUri = "https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
-            dynamic detailerResponse = RestClient.PostData(requestUri, GetDetailerRequestPayload(newVehicle));
-            #endregion Detailer call
+            try
+            {
+                #region Detailer Call
+                //TODO: move uri to configuration file
+                var requestUri = "https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
+                dynamic detailerResponse = RestClient.PostData(requestUri, GetDetailerRequestPayload(newVehicle));
+                _logger.AppendMessages("Successfully completed Detailer call before Create Vehicle.");
+                #endregion Detailer call
 
-            #region Create Vehicle Call
-                        if (detailerResponse.vehicles != null && detailerResponse.vehicles.GetType() == typeof(JArray)
-                            && detailerResponse.vehicles[0] != null && detailerResponse.vehicles[0].vehicle != null)
+                #region Create Vehicle Call
+                if (detailerResponse.vehicles != null && detailerResponse.vehicles.GetType() == typeof(JArray)
+                    && detailerResponse.vehicles[0] != null && detailerResponse.vehicles[0].vehicle != null)
+                {
+                    _logger.AppendMessages("Detailer found atleast one vehicle in response.");
+
+                    JObject vehicleEntity = detailerResponse.vehicles[0].vehicle;
+                    vehicleEntity.Add("stockNumber", newVehicle.StockNumber ?? string.Empty);
+                    var createVehicleRequestPayload = string.Format("{{\"criteria\":{{\"vehicleContexts\":[{{\"vehicleContext\":{{\"vehicle\":{0},\"modifiedFields\":[\"assets\",\"bodyStyle\",\"bodyType\",\"certified\",\"colors.exterior.base\",\"colors.exterior.code\",\"colors.exterior.name\",\"colors.interior.code\",\"colors.interior.name\",\"createdDate\",\"descriptions\",\"doors\",\"drivetrain\",\"engine.aspiration\",\"engine.cylinders\",\"engine.description\",\"engine.displacement\",\"engine.fuelType\",\"engine.power\",\"id\",\"inventoryOwner\",\"lastModifiedDate\",\"lotDate\",\"make.Id\",\"make.label\",\"model.Id\",\"model.label\",\"odometer\",\"oemModelCode\",\"options.dealerOptions\",\"options.factoryOptions\",\"preOwned\",\"prices.discountPrice\",\"prices.internetPrice\",\"prices.invoicePrice\",\"prices.msrp\",\"prices.retailPrice\",\"prices.vendedPrice\",\"stockNumber\",\"style.Id\",\"style.trim\",\"transmission.speeds\",\"transmission.text\",\"transmission.type\",\"unmodifiable\",\"vin\",\"warranties\",\"year\"]}}}}],\"inventoryOwner\":\"gmps-kindred\"}}}}",
+                        vehicleEntity);
+
+                    _logger.AppendMessages(string.Format("Request payload for create vehicle call - {0}", createVehicleRequestPayload));
+
+                    //TODO: move uri to configuration file
+                    dynamic result = RestClient.PostData("https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles?inventoryOwner=gmps-kindred", createVehicleRequestPayload);
+
+                    _logger.AppendMessages("Create Vehicle call successful");
+
+                    if (result != null && result.result != null)
+                    {
+                        result = result.result;
+                        if (result != null
+                            && result.status != null
+                            && result.status.GetType() == typeof(JArray)
+                            && result.status[0].vehicle != null)
                         {
-                            JObject vehicleEntity = detailerResponse.vehicles[0].vehicle;
-                            vehicleEntity.Add("stockNumber", newVehicle.StockNumber ?? string.Empty);
-                            var createVehicleRequestPayload = string.Format("{{\"criteria\":{{\"vehicleContexts\":[{{\"vehicleContext\":{{\"vehicle\":{0},\"modifiedFields\":[\"assets\",\"bodyStyle\",\"bodyType\",\"certified\",\"colors.exterior.base\",\"colors.exterior.code\",\"colors.exterior.name\",\"colors.interior.code\",\"colors.interior.name\",\"createdDate\",\"descriptions\",\"doors\",\"drivetrain\",\"engine.aspiration\",\"engine.cylinders\",\"engine.description\",\"engine.displacement\",\"engine.fuelType\",\"engine.power\",\"id\",\"inventoryOwner\",\"lastModifiedDate\",\"lotDate\",\"make.Id\",\"make.label\",\"model.Id\",\"model.label\",\"odometer\",\"oemModelCode\",\"options.dealerOptions\",\"options.factoryOptions\",\"preOwned\",\"prices.discountPrice\",\"prices.internetPrice\",\"prices.invoicePrice\",\"prices.msrp\",\"prices.retailPrice\",\"prices.vendedPrice\",\"stockNumber\",\"style.Id\",\"style.trim\",\"transmission.speeds\",\"transmission.text\",\"transmission.type\",\"unmodifiable\",\"vin\",\"warranties\",\"year\"]}}}}],\"inventoryOwner\":\"gmps-kindred\"}}}}", 
-                                vehicleEntity);
-                            //TODO: move uri to configuration file
-                            dynamic result = RestClient.PostData("https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles?inventoryOwner=gmps-kindred", createVehicleRequestPayload);
+                            TryGetMake(result.status[0].vehicle, resultVehicleEntity);
+                            TryGetModel(result.status[0].vehicle, resultVehicleEntity);
+                            TryGetOemModelCode(result.status[0].vehicle, resultVehicleEntity);
+                            TryGetTrimAndStyle(result.status[0].vehicle, resultVehicleEntity);
+                            TryGetYear(result.status[0].vehicle, resultVehicleEntity);
 
-                            if (result != null && result.result != null)
+                            #region Get Color from response
+                            var refStyles = result.status[0].vehicle;
+                            if (refStyles.colors != null && refStyles.colors.GetType() == typeof(JArray))
                             {
-                                result = result.result;
-                                if (result != null
-                                    && result.status != null
-                                    && result.status.GetType() == typeof(JArray)
-                                    && result.status[0].vehicle != null)
+                                foreach (var iColor in refStyles.colors)
                                 {
-                                    TryGetMake(result.status[0].vehicle, resultVehicleEntity);
-                                    TryGetModel(result.status[0].vehicle, resultVehicleEntity);
-                                    TryGetOemModelCode(result.status[0].vehicle, resultVehicleEntity);
-                                    TryGetTrimAndStyle(result.status[0].vehicle, resultVehicleEntity);
-                                    TryGetYear(result.status[0].vehicle, resultVehicleEntity);
+                                    var color = iColor.color;
+                                    var colorRefObject = new ColorReferenceEntity();
 
-                                    #region Get Color from response
-                                    var refStyles = result.status[0].vehicle;
-                                    if (refStyles.colors != null && refStyles.colors.GetType() == typeof(JArray))
+                                    if (color.category != null && color.category == "Exterior")
                                     {
-                                        foreach (var iColor in refStyles.colors)
+                                        resultVehicleEntity.ExternalColor = new Color
                                         {
-                                            var color = iColor.color;
-                                            var colorRefObject = new ColorReferenceEntity();
-
-                                            if (color.category != null && color.category == "Exterior")
-                                            {
-                                                resultVehicleEntity.ExternalColor = new Color
-                                                {
-                                                    Code = color.code ?? string.Empty,
-                                                    //Base = color.exterior.base ?? string.Empty,
-                                                    Name = color.name ?? string.Empty,
-                                                    RgbHexCode = color.RGBHexCode ?? string.Empty
-                                                };
-                                            }
-
-                                            if (color.category != null && color.category == "Interior")
-                                            {
-                                                resultVehicleEntity.InternalColor = new Color
-                                                {
-                                                    Code = color.code ?? string.Empty,
-                                                    //Base = color.exterior.base ?? string.Empty,
-                                                    Name = color.name ?? string.Empty,
-                                                    RgbHexCode = color.RGBHexCode ?? string.Empty
-                                                };                                          
-                                            }                                            
-                                        }
+                                            Code = color.code ?? string.Empty,
+                                            //Base = color.exterior.base ?? string.Empty,
+                                            Name = color.name ?? string.Empty,
+                                            RgbHexCode = color.RGBHexCode ?? string.Empty
+                                        };
                                     }
-                                   
-                                    #endregion Get Color from response
+
+                                    if (color.category != null && color.category == "Interior")
+                                    {
+                                        resultVehicleEntity.InternalColor = new Color
+                                        {
+                                            Code = color.code ?? string.Empty,
+                                            //Base = color.exterior.base ?? string.Empty,
+                                            Name = color.name ?? string.Empty,
+                                            RgbHexCode = color.RGBHexCode ?? string.Empty
+                                        };
+                                    }
                                 }
                             }
+
+                            #endregion Get Color from response
                         }
-            
-            #endregion Create Vehicle Call
+                    }
+                }
+
+                #endregion Create Vehicle Call
+            }
+            catch(Exception ex)
+            {
+                eventLogType = EventLogEntryType.Error;
+                _logger.AppendMessages(string.Format("Error - {0}.", ex));
+            }
+            finally
+            {
+                _logger.LogAppendedMessages(eventLogType);
+            }
             
             return resultVehicleEntity;
 
@@ -101,10 +125,28 @@ namespace OCRWebApi.Models
         /// <returns>Vehicle object associated with the VIN</returns>
         public VehicleEntity GetYearMakeModelByVin(string vin)
         {
-            //TODO: pull URL from configuration file.
-            var requestUri = "https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
-            string jsonMessage = "{\"vehicles\":[{\"vehicle\":{\"vin\":\""+ vin +"\"}}]}";
-            return GetVehicleEntityByParsingJSON(RestClient.PostData(requestUri, jsonMessage));
+            EventLogEntryType eventLogType = EventLogEntryType.Information;
+            try
+            {                
+                //TODO: pull URL from configuration file.
+                var requestUri = "https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
+                string jsonMessage = "{\"vehicles\":[{\"vehicle\":{\"vin\":\"" + vin + "\"}}]}";
+                _logger.AppendMessages(string.Format("GetYearMakeModelByVin request payload {0}.", jsonMessage));
+                var response = GetVehicleEntityByParsingJSON(RestClient.PostData(requestUri, jsonMessage));
+
+                return response;
+            }
+            catch(Exception ex)
+            {
+                eventLogType = EventLogEntryType.Error;
+                _logger.AppendMessages(string.Format("Error in GetYearMakeModelByVin {0}.", ex.Message));
+            }
+            finally
+            {
+                _logger.LogAppendedMessages(eventLogType);
+            }
+
+            return null;
         }
         
         /// <summary>
@@ -116,20 +158,58 @@ namespace OCRWebApi.Models
         /// <returns>Taxonomy list</returns>
         public IEnumerable<VehicleEntity> GetTaxonomyRecordsByYearMakeModel(string year, string make, string model)
         {
-            //TODO: pull URL from configuration file.
-            var requestUri = string.Format("https://api.dev-2.cobalt.com/inventory/rest/v1.0/taxonomy/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&make={1}&model={2}&year={0}",year,make,model);
-            return GetTaxonomyListByParsingJson(RestClient.GetData(requestUri));
+            var eventLogType = EventLogEntryType.Information;
+            try
+            {
+                //TODO: pull URL from configuration file.
+                var requestUri = string.Format("https://api.dev-2.cobalt.com/inventory/rest/v1.0/taxonomy/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&make={1}&model={2}&year={0}", year, make, model);
+                _logger.AppendMessages(string.Format("GetTaxonomyRecordsByYearMakeModel requesting API with URL {0}.",requestUri));
+                var result = GetTaxonomyListByParsingJson(RestClient.GetData(requestUri));
+                _logger.AppendMessages("Successfully completed GetTaxonomyRecordsByYearMakeModel.");
+                return result;
+            }
+            catch(Exception ex)
+            {
+                eventLogType = EventLogEntryType.Error;
+                _logger.AppendMessages(string.Format("Error in GetTaxonomyRecordsByYearMakeModel - {0}.", ex.Message));
+            }
+            finally
+            {
+                _logger.LogAppendedMessages(eventLogType);
+            }
+            return null;
+            
         }
 
         public ReferenceDataEntity GetOptionsByStyleId(string styleId)
         {
-            //TODO: pull URL from configuration file.
-            var requestUri = string.Format("https://api.dev-2.cobalt.com/inventory/rest/v1.0/reference/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&loadColors=true&styleId={0}", styleId);
-            var jsonResult = RestClient.GetData(requestUri);
-            return new ReferenceDataEntity{
-                Colors = GetColorReferenceEntities(jsonResult),
-                Options = GetOptionsListByParsingJson(jsonResult)
-            };            
+            EventLogEntryType eventLogType = EventLogEntryType.Information;
+            try
+            {
+                //TODO: pull URL from configuration file.
+                var requestUri = string.Format("https://api.dev-2.cobalt.com/inventory/rest/v1.0/reference/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&loadColors=true&styleId={0}", styleId);
+                _logger.AppendMessages(string.Format("GetOptionsByStyleId using URI {0}.", requestUri));
+                var jsonResult = RestClient.GetData(requestUri);
+                _logger.AppendMessages("Successfully got data from API - GetOptionsBySytleId.");
+                var result = new ReferenceDataEntity
+                {
+                    Colors = GetColorReferenceEntities(jsonResult),
+                    Options = GetOptionsListByParsingJson(jsonResult)
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                eventLogType = EventLogEntryType.Error;
+                _logger.AppendMessages(string.Format("Error in GetOptionsByStyleId.", ex.Message));
+            }
+            finally
+            {
+                _logger.LogAppendedMessages(eventLogType);
+            }
+
+            return null;
+
         }
 
         private string GetDetailerRequestPayload(VehicleEntity newVehicle)

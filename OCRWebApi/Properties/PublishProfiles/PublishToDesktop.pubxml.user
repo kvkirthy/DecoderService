@@ -75,6 +75,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/KeepDynamic.BarcodeReader.dll">
       <publishTime>10/28/2013 23:18:57</publishTime>
     </File>
+    <File Include="bin/Microsoft.Practices.ServiceLocation.dll">
+      <publishTime>11/22/2013 18:18:36</publishTime>
+    </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>10/17/2013 15:59:56</publishTime>
     </File>
@@ -85,10 +88,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/17/2013 15:59:57</publishTime>
     </File>
     <File Include="bin/OCRWebApi.dll">
-      <publishTime>10/31/2013 11:38:35</publishTime>
+      <publishTime>11/29/2013 20:39:12</publishTime>
     </File>
     <File Include="bin/Searchlight.Security.dll">
       <publishTime>10/08/2013 17:40:42</publishTime>
+    </File>
+    <File Include="bin/StructureMap.dll">
+      <publishTime>11/22/2013 18:18:36</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>10/17/2013 15:59:58</publishTime>
@@ -119,6 +125,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="bin/System.Web.WebPages.Razor.dll">
       <publishTime>10/17/2013 15:59:58</publishTime>
+    </File>
+    <File Include="bin/WebActivator.dll">
+      <publishTime>11/22/2013 18:18:36</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>10/17/2013 16:00:01</publishTime>
@@ -295,7 +304,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/17/2013 15:59:41</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>10/27/2013 18:40:35</publishTime>
+      <publishTime>11/22/2013 18:18:41</publishTime>
     </File>
     <File Include="Scripts/jquery-1.8.2.js">
       <publishTime>10/17/2013 15:59:50</publishTime>
@@ -339,6 +348,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Scripts/_references.js">
       <publishTime>10/17/2013 15:59:56</publishTime>
     </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>11/27/2013 17:28:17</publishTime>
+    </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>10/17/2013 15:59:41</publishTime>
     </File>
@@ -352,7 +364,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/17/2013 15:59:41</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/30/2013 00:53:19</publishTime>
+      <publishTime>11/27/2013 20:35:00</publishTime>
     </File>
   </ItemGroup>
 </Project>

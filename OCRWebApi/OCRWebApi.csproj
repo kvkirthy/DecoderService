@@ -158,7 +158,9 @@
     </Compile>
     <Compile Include="Models\Color.cs" />
     <Compile Include="Models\ColorReferenceEntity.cs" />
+    <Compile Include="Models\ILogger.cs" />
     <Compile Include="Models\IVehicleFacade.cs" />
+    <Compile Include="Models\Logger.cs" />
     <Compile Include="Models\OptionsEntity.cs" />
     <Compile Include="Models\ReferenceDataEntity.cs" />
     <Compile Include="Models\RestClient.cs" />

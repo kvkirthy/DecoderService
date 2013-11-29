@@ -52,3 +52,10 @@ C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRW
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Release\OCRWebApi.dll
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\obj\Release\OCRWebApi.pdb
 C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\OCRWebApi.dll.config
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\Microsoft.Practices.ServiceLocation.dll
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\StructureMap.dll
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\WebActivator.dll
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\Microsoft.Practices.ServiceLocation.pdb
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\Microsoft.Practices.ServiceLocation.xml
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\StructureMap.pdb
+C:\Users\KotaruV\Documents\Visual Studio 2012\Projects\Playground\OCRWebApi\OCRWebApi\bin\StructureMap.xml

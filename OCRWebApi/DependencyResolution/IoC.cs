@@ -29,6 +29,7 @@ namespace OCRWebApi.DependencyResolution {
                                         scan.WithDefaultConventions();
                                     });
                             x.For<IVehicleFacade>().Use<VehicleRestClient>();
+                            x.For<ILogger>().Use<Logger>();
                         });
             return ObjectFactory.Container;
         }
