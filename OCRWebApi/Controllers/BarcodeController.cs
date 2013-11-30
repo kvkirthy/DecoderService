@@ -14,6 +14,7 @@ namespace OCRWebApi.Controllers
     public class BarcodeController : ApiController
     {
 
+        //TODO: Use DI
         public string processImage(string image)
         {
             string[] barcodeValues = BarcodeReader.read(image, KeepDynamic.BarcodeReader.Type.CODE39);
@@ -22,6 +23,7 @@ namespace OCRWebApi.Controllers
 
         public async Task<HttpResponseMessage> PostFormData()
         {
+            //TODO: remove debug message here. Use Logging that's injected.
             StringBuilder debugMessage = new StringBuilder();
             debugMessage.Append("Begin. ");
             string fileUri = string.Empty;
@@ -56,26 +58,15 @@ namespace OCRWebApi.Controllers
                 {
                     fileUri = file.LocalFileName;
                     debugMessage.Append("File Name " + fileUri + ". ");
-                }
-
-                //string outputFileName = DateTime.Now.Date.ToString() + DateTime.Now.Month.ToString() +
-                //DateTime.Now.Year.ToString() + DateTime.Now.Hour.ToString() +
-                //DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() +
-                //DateTime.Now.Millisecond.ToString();
-
-                //outputFileName = outputFileName + ".txt";
-
-                //debugMessage.Append("Output file name " + outputFileName + ". ");
+                }  
 
                 System.Diagnostics.EventLog.WriteEntry("Application", debugMessage.ToString(), System.Diagnostics.EventLogEntryType.Information);
 
                 var response = processImage(fileUri);
 
                 var httpResponse= Request.CreateResponse(HttpStatusCode.OK);
-                //httpResponse.Headers.Add("returnText", response);
                 httpResponse.Content = new StringContent(response);
-                return httpResponse;
-                //return Request.CreateErrorResponse(HttpStatusCode.Accepted, sb.ToString());
+                return httpResponse;                
             }
             catch (System.Exception e)
             {

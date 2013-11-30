@@ -40,15 +40,22 @@ namespace OCRWebApi.Models
 
                     JObject vehicleEntity = detailerResponse.vehicles[0].vehicle;
                     vehicleEntity.Add("stockNumber", newVehicle.StockNumber ?? string.Empty);
+
+                    //var assets = vehicleEntity.GetValue("assets");
+                    
+                    //if(assets == null)
+                    //{
+                    //    vehicleEntity.Add("assets", "{\"dealerPhotos\": [{\"id\":\"7242902804\"}]}");
+                    //    assets = vehicleEntity.GetValue("assets");
+                    //}                    
+
                     var createVehicleRequestPayload = string.Format("{{\"criteria\":{{\"vehicleContexts\":[{{\"vehicleContext\":{{\"vehicle\":{0},\"modifiedFields\":[\"assets\",\"bodyStyle\",\"bodyType\",\"certified\",\"colors.exterior.base\",\"colors.exterior.code\",\"colors.exterior.name\",\"colors.interior.code\",\"colors.interior.name\",\"createdDate\",\"descriptions\",\"doors\",\"drivetrain\",\"engine.aspiration\",\"engine.cylinders\",\"engine.description\",\"engine.displacement\",\"engine.fuelType\",\"engine.power\",\"id\",\"inventoryOwner\",\"lastModifiedDate\",\"lotDate\",\"make.Id\",\"make.label\",\"model.Id\",\"model.label\",\"odometer\",\"oemModelCode\",\"options.dealerOptions\",\"options.factoryOptions\",\"preOwned\",\"prices.discountPrice\",\"prices.internetPrice\",\"prices.invoicePrice\",\"prices.msrp\",\"prices.retailPrice\",\"prices.vendedPrice\",\"stockNumber\",\"style.Id\",\"style.trim\",\"transmission.speeds\",\"transmission.text\",\"transmission.type\",\"unmodifiable\",\"vin\",\"warranties\",\"year\"]}}}}],\"inventoryOwner\":\"gmps-kindred\"}}}}",
                         vehicleEntity);
 
                     _logger.AppendMessages(string.Format("Request payload for create vehicle call - {0}", createVehicleRequestPayload));
 
                     //TODO: move uri to configuration file
-                    dynamic result = RestClient.PostData("https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles?inventoryOwner=gmps-kindred", createVehicleRequestPayload);
-
-                    _logger.AppendMessages("Create Vehicle call successful");
+                    dynamic result = RestClient.PostData("https://api.dev-2.cobalt.com/inventory/rest/v1.0/vehicles?inventoryOwner=gmps-kindred", createVehicleRequestPayload);                    
 
                     if (result != null && result.result != null)
                     {
@@ -58,6 +65,9 @@ namespace OCRWebApi.Models
                             && result.status.GetType() == typeof(JArray)
                             && result.status[0].vehicle != null)
                         {
+                            _logger.AppendMessages("Create Vehicle call successful");
+                            resultVehicleEntity.Vin = result.status[0].vehicle.vin ?? string.Empty;
+                            resultVehicleEntity.StockNumber = result.status[0].vehicle.stockNumber ?? string.Empty;
                             TryGetMake(result.status[0].vehicle, resultVehicleEntity);
                             TryGetModel(result.status[0].vehicle, resultVehicleEntity);
                             TryGetOemModelCode(result.status[0].vehicle, resultVehicleEntity);
@@ -99,6 +109,12 @@ namespace OCRWebApi.Models
 
                             #endregion Get Color from response
                         }
+                    }
+                    
+                    if(result.error != null && result.error.message != null)
+                    {
+                        _logger.AppendMessages("Create Vehicle call unsuccessful");
+                        throw new Exception(result.error.message);
                     }
                 }
 
