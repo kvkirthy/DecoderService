@@ -55,6 +55,53 @@ namespace OCRWebApi.Models
             return result;
         }
 
+        public static JObject PutData(string url, string payload)
+        {
+            var request = WebRequest.Create(url);
+            request.Method = "PUT";
+            request.ContentType = "application/json";
+            request.ContentLength = payload.Length;
+
+            if (payload != null && payload != string.Empty)
+            {
+                var streamWriter = new StreamWriter(request.GetRequestStream());
+                streamWriter.Write(payload);
+                streamWriter.Close();
+            }
+
+            JObject result = new JObject();
+
+            using (var response = request.GetResponse() as HttpWebResponse)
+            {
+                if (response == null)
+                {
+                    throw new InvalidOperationException("no response returned");
+                }
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseStream = response.GetResponseStream();
+
+                    if (responseStream != null)
+                    {
+                        using (var responseReader = new StreamReader(responseStream))
+                        {
+                            result = JObject.Parse(responseReader.ReadToEnd());
+                        }
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("response stream is empty");
+                    }
+                }
+                else
+                {
+                    throw new HttpException("API returned error code " + response.StatusCode);
+                }
+            }
+
+            return result;
+        }
+
         public static JObject PostData(string url, string postData)
         {
             var request = WebRequest.Create(url);

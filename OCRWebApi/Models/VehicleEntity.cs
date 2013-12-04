@@ -22,6 +22,8 @@ namespace OCRWebApi.Models
         public IEnumerable<OptionsEntity> Options{ get; set; }
         public Color ExternalColor { get; set; }
         public Color InternalColor { get; set; }
+        
+        public IEnumerable<string> photoIds { get; set; }
 
     }
 }
