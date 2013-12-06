@@ -50,10 +50,7 @@ namespace OCRWebApi.Models
                                 vehicleEntity.Add("assets", JObject.Parse("{\"dealerPhotos\": [{\"id\":" + id + "}]}"));
                             }
                         }
-
-                    }
-
-                    
+                    }                    
 
                     if (vehicleEntity.GetValue("source") == null)
                     {
@@ -77,19 +74,6 @@ namespace OCRWebApi.Models
                             && result.status[0].vehicle != null)
                         {
                             _logger.AppendMessages("Create Vehicle call successful");
-
-                        //    var assets = vehicleEntity.GetValue("assets");
-
-                        //    if(assets == null)
-                        //    {                                
-                        //        vehicleEntity.Add("assets", JObject.Parse("{\"dealerPhotos\": [{\"id\":7242902804}]}"));
-                        //        assets = vehicleEntity.GetValue("assets");
-                        //    }
-
-                        //    var updateVehicleRequestPayload = string.Format("{{\"criteria\":{{\"vehicleContexts\":[{{\"vehicleContext\":{{\"vehicle\":{0},\"modifiedFields\":[\"assets\",\"bodyStyle\",\"bodyType\",\"certified\",\"colors.exterior.base\",\"colors.exterior.code\",\"colors.exterior.name\",\"colors.interior.code\",\"colors.interior.name\",\"createdDate\",\"descriptions\",\"doors\",\"drivetrain\",\"engine.aspiration\",\"engine.cylinders\",\"engine.description\",\"engine.displacement\",\"engine.fuelType\",\"engine.power\",\"id\",\"inventoryOwner\",\"lastModifiedDate\",\"lotDate\",\"make.Id\",\"make.label\",\"model.Id\",\"model.label\",\"odometer\",\"oemModelCode\",\"options.dealerOptions\",\"options.factoryOptions\",\"preOwned\",\"prices.discountPrice\",\"prices.internetPrice\",\"prices.invoicePrice\",\"prices.msrp\",\"prices.retailPrice\",\"prices.vendedPrice\",\"stockNumber\",\"style.Id\",\"style.trim\",\"transmission.speeds\",\"transmission.text\",\"transmission.type\",\"unmodifiable\",\"vin\",\"warranties\",\"year\"]}}}}],\"inventoryOwner\":\"gmps-kindred\"}}}}",
-                        //vehicleEntity);
-
-                        //    dynamic putResult = RestClient.PutData("https://api.dev-3.cobalt.com/inventory/rest/v1.0/vehicles?inventoryOwner=gmps-kindred", updateVehicleRequestPayload);
 
                             resultVehicleEntity.Vin = result.status[0].vehicle.vin ?? string.Empty;
                             resultVehicleEntity.StockNumber = result.status[0].vehicle.stockNumber ?? string.Empty;
@@ -156,7 +140,6 @@ namespace OCRWebApi.Models
             }
             
             return resultVehicleEntity;
-
         }
 
         public void UpdateVehicleImages()

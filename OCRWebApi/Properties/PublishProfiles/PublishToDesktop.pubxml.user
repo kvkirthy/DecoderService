@@ -88,7 +88,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/17/2013 15:59:57</publishTime>
     </File>
     <File Include="bin/OCRWebApi.dll">
-      <publishTime>11/30/2013 17:52:03</publishTime>
+      <publishTime>12/06/2013 15:08:16</publishTime>
     </File>
     <File Include="bin/Searchlight.Security.dll">
       <publishTime>10/08/2013 17:40:42</publishTime>
