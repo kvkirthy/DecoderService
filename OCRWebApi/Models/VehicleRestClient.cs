@@ -262,13 +262,22 @@ namespace OCRWebApi.Models
             string factoryOptionsArray = string.Empty;
             if (newVehicle.Options != null)
             {
-                factoryOptionsArray = "\"factoryOptions\":[";
+                factoryOptionsArray = string.Empty;
                 foreach (var option in newVehicle.Options)
                 {
-                    var factoryOptionEntity = string.Format("{\"id\":4,\"optionCode\":\"{0}\",\"description\":\"{1}\"}", option.OptionCode, option.Description);
-                    factoryOptionsArray = string.Format("{0},{1}", factoryOptionsArray, factoryOptionEntity);
+                    var factoryOptionEntity = string.Format("{{\"id\":4,\"optionCode\":\"{0}\",\"description\":\"{1}\"}}", option.OptionCode, option.Description);
+
+                    if(factoryOptionsArray == string.Empty)
+                    {
+                        factoryOptionsArray = factoryOptionEntity;
+                    }
+                    else
+                    {
+                        factoryOptionsArray = string.Format("{0},{1}", factoryOptionsArray, factoryOptionEntity);
+                    }
+                    
                 }
-                factoryOptionsArray = string.Format("{0}]", factoryOptionsArray);
+                factoryOptionsArray = string.Format("\"factoryOptions\":[{0}]", factoryOptionsArray);
             }
             optionsPayload = string.Format("\"options\":{{{0}}}", factoryOptionsArray);
 
