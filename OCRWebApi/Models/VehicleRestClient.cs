@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -26,8 +27,7 @@ namespace OCRWebApi.Models
             try
             {
                 #region Detailer Call
-                //TODO: move uri to configuration file
-                var requestUri = "https://api.dev-3.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
+                var requestUri = ConfigurationManager.AppSettings["detailerUrl"];                
                 dynamic detailerResponse = RestClient.PostData(requestUri, GetDetailerRequestPayload(newVehicle));
                 _logger.AppendMessages("Successfully completed Detailer call before Create Vehicle.");
                 #endregion Detailer call
@@ -35,18 +35,24 @@ namespace OCRWebApi.Models
                 #region Create Vehicle Call
                 if (detailerResponse.vehicles != null && detailerResponse.vehicles.GetType() == typeof(JArray)
                     && detailerResponse.vehicles[0] != null && detailerResponse.vehicles[0].vehicle != null)
-                {
-                    _logger.AppendMessages("Detailer found atleast one vehicle in response.");
+                {                   
 
                     JObject vehicleEntity = detailerResponse.vehicles[0].vehicle;
                     vehicleEntity.Add("stockNumber", newVehicle.StockNumber ?? string.Empty);
 
-                    if(newVehicle.photoIds != null)
+                    _logger.AppendMessages("Detailer found atleast one vehicle in response.");
+
+                    if (newVehicle.photoIds != null)
                     {
+                        //??
+                        _logger.AppendMessages("Number of PhotoIds: " + newVehicle.photoIds.Count());
+                        //vehicleEntity.Add("assets", JObject.Parse("{\"dealerPhotos\": []}"));
                         foreach (var id in newVehicle.photoIds)
                         {
-                            if (vehicleEntity.GetValue("assets") == null)
+                            if (id != null && !id.Equals(string.Empty) && !id.Equals(" ") && vehicleEntity.GetValue("assets") == null)
                             {
+                                //??
+                                _logger.AppendMessages("L");
                                 vehicleEntity.Add("assets", JObject.Parse("{\"dealerPhotos\": [{\"id\":" + id + "}]}"));
                             }
                         }
@@ -62,8 +68,7 @@ namespace OCRWebApi.Models
 
                     _logger.AppendMessages(string.Format("Request payload for create vehicle call - {0}", createVehicleRequestPayload));
 
-                    //TODO: move uri to configuration file
-                    dynamic result = RestClient.PostData("https://api.dev-3.cobalt.com/inventory/rest/v1.0/vehicles?inventoryOwner=gmps-kindred", createVehicleRequestPayload);                    
+                    dynamic result = RestClient.PostData(ConfigurationManager.AppSettings["createVehicleUrl"], createVehicleRequestPayload);
 
                     if (result != null && result.result != null)
                     {
@@ -73,7 +78,7 @@ namespace OCRWebApi.Models
                             && result.status.GetType() == typeof(JArray)
                             && result.status[0].vehicle != null)
                         {
-                            _logger.AppendMessages("Create Vehicle call successful");
+                            _logger.AppendMessages(string.Format("Create Vehicle call successful . result {0} ", result));
 
                             resultVehicleEntity.Vin = result.status[0].vehicle.vin ?? string.Empty;
                             resultVehicleEntity.StockNumber = result.status[0].vehicle.stockNumber ?? string.Empty;
@@ -156,9 +161,8 @@ namespace OCRWebApi.Models
         {
             EventLogEntryType eventLogType = EventLogEntryType.Information;
             try
-            {                
-                //TODO: pull URL from configuration file.
-                var requestUri = "https://api.dev-3.cobalt.com/inventory/rest/v1.0/vehicles/detail?inventoryOwner=gmps-kindred&locale=en_us";
+            {   
+                var requestUri = ConfigurationManager.AppSettings["getYearMakeModelUrl"];
                 string jsonMessage = "{\"vehicles\":[{\"vehicle\":{\"vin\":\"" + vin + "\"}}]}";
                 _logger.AppendMessages(string.Format("GetYearMakeModelByVin request payload {0}.", jsonMessage));
                 var response = GetVehicleEntityByParsingJSON(RestClient.PostData(requestUri, jsonMessage));
@@ -190,8 +194,8 @@ namespace OCRWebApi.Models
             var eventLogType = EventLogEntryType.Information;
             try
             {
-                //TODO: pull URL from configuration file.
-                var requestUri = string.Format("https://api.dev-3.cobalt.com/inventory/rest/v1.0/taxonomy/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&make={1}&model={2}&year={0}", year, make, model);
+                var baseUrl = ConfigurationManager.AppSettings["taxonomyUrl"];
+                var requestUri = string.Format(baseUrl, year, make, model);
                 _logger.AppendMessages(string.Format("GetTaxonomyRecordsByYearMakeModel requesting API with URL {0}.",requestUri));
                 var result = GetTaxonomyListByParsingJson(RestClient.GetData(requestUri));
                 _logger.AppendMessages("Successfully completed GetTaxonomyRecordsByYearMakeModel.");
@@ -215,8 +219,8 @@ namespace OCRWebApi.Models
             EventLogEntryType eventLogType = EventLogEntryType.Information;
             try
             {
-                //TODO: pull URL from configuration file.
-                var requestUri = string.Format("https://api.dev-3.cobalt.com/inventory/rest/v1.0/reference/search?inventoryLocale=en_us&inventoryOwner=gmps-kindred&loadColors=true&styleId={0}", styleId);
+                var baseUrl = ConfigurationManager.AppSettings["getOptions"];
+                var requestUri = string.Format(baseUrl, styleId);
                 _logger.AppendMessages(string.Format("GetOptionsByStyleId using URI {0}.", requestUri));
                 var jsonResult = RestClient.GetData(requestUri);
                 _logger.AppendMessages("Successfully got data from API - GetOptionsBySytleId.");
